@@ -36,7 +36,7 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      * In order to save the people followed by a user organized in groups, adopt
      * a generic-type Map:  think of what type of keys and values would best suit the requirements
      */
-
+    private final Map<String,List<U>> m = new HashMap<>();
     /*
      * [CONSTRUCTORS]
      *
@@ -62,7 +62,7 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *            application
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
-        super(null, null, null, 0);
+        super(name, surname, user, userAge);
     }
 
     /*
@@ -74,8 +74,24 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *
      * Implements the methods below
      */
+    public SocialNetworkUserImpl(final String name, final String surname, final String user) {
+        super(name, surname, user);
+    }
+
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
+        List<U> ls;
+        if(!m.containsKey(circle)) {
+            ls = new ArrayList<>();
+            ls.add(user);
+            m.put(circle, ls);
+            return true;
+        }
+        ls = m.get(circle);
+        if(!ls.contains(user)) {
+            m.get(circle).add(user);
+            return true;
+        } 
         return false;
     }
 
@@ -86,11 +102,20 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+        if(m.containsKey(groupName)) {
+            Collection<U> ris = new ArrayList<>();
+            ris.addAll(m.get(groupName));
+            return ris;
+        }
+        return new HashSet<U>();
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        List<U> ris = new ArrayList<>();
+        for (var iterable_element : m.keySet()) {
+            ris.addAll(m.get(iterable_element));
+        }
+        return ris;
     }
 }
