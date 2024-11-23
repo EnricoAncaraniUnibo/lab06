@@ -1,19 +1,20 @@
 package it.unibo.generics.graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 import it.unibo.generics.graph.api.Graph;
+import it.unibo.generics.graph.api.Strategy;
 
 public class GraphImpl<T> implements Graph<T>{
     private final Map<T, Set<T>> m;
-    private final BiFunction<T,T,List<T>> strategy;
+    private final Strategy<T> strategy;
 
-    public GraphImpl(final BiFunction<T,T,List<T>> strat) {
+    public GraphImpl(final Strategy<T> strat) {
         m = new HashMap<>();
         this.strategy = strat;
     }
@@ -29,12 +30,6 @@ public class GraphImpl<T> implements Graph<T>{
     public void addEdge(T source, T target) {
         if(source != null && target != null) {
             m.get(source).add(target);
-            if(m.containsKey(target)) {
-                m.get(target).add(source);
-            } else {
-                m.put(target, new HashSet<>());
-                m.get(target).add(source);
-            }
         }
     }
 
@@ -54,7 +49,7 @@ public class GraphImpl<T> implements Graph<T>{
     }
 
     private List<T> calculatePath(T source, T target) {
-        return strategy.apply(source, target);
+        return strategy.apply(source, target, new ArrayList<>(), new ArrayList<>(), this);
     }
     
 }
