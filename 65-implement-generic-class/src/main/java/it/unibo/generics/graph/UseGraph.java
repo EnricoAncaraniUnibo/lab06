@@ -24,12 +24,6 @@ public final class UseGraph {
      */
     public static void main(final String... args) {
         Graph<String> g = new GraphImpl<>(new BiFunction<String, String, List<String>>() {
-
-            @Override
-            public List<String> apply(String t, String u) {
-                
-            }
-
         });
         /*
          * Test your graph implementation(s) by calling testGraph
