@@ -5,25 +5,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import it.unibo.generics.graph.api.Graph;
 
-public class GraphImpl implements Graph<Object>{
-    Map<Object, Set<Object>> m;
+public class GraphImpl<T> implements Graph<T>{
+    private final Map<T, Set<T>> m;
+    private final BiFunction<T,T,List<T>> strategy;
 
-    public GraphImpl() {
+    public GraphImpl(final BiFunction<T,T,List<T>> strat) {
         m = new HashMap<>();
+        this.strategy = strat;
     }
 
     @Override
-    public void addNode(Object node) {
+    public void addNode(T node) {
         if(node != null && !m.containsKey(node)) {
             m.put(node, new HashSet<>());
         }
     }
 
     @Override
-    public void addEdge(Object source, Object target) {
+    public void addEdge(T source, T target) {
         if(source != null && target != null) {
             m.get(source).add(target);
             if(m.containsKey(target)) {
@@ -36,18 +39,22 @@ public class GraphImpl implements Graph<Object>{
     }
 
     @Override
-    public Set<Object> nodeSet() {
+    public Set<T> nodeSet() {
         return m.keySet();
     }
 
     @Override
-    public Set<Object> linkedNodes(Object node) {
+    public Set<T> linkedNodes(T node) {
         return m.get(node);
     }
 
     @Override
-    public List<Object> getPath(Object source, Object target) {
-        
+    public List<T> getPath(T source, T target) {
+        return this.calculatePath(source, target);
+    }
+
+    private List<T> calculatePath(T source, T target) {
+        return strategy.apply(source, target);
     }
     
 }

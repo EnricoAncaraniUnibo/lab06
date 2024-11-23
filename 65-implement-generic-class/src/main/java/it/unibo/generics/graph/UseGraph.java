@@ -1,10 +1,10 @@
 package it.unibo.generics.graph;
 
-import it.unibo.generics.graph.api.Graph;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
+
+import it.unibo.generics.graph.api.Graph;
 
 /**
  *
