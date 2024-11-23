@@ -12,6 +12,10 @@ public class StrategyDfs<T> implements Strategy<T>{
 
     @Override
     public List<T> apply(T source, T target, List<T> tmpResult, List<T> visited, Graph<T> graph) {
+        if(source == target) {
+            ls.add(target);
+            return ls;
+        }
         visited.add(source);
         tmpResult.add(source);
         for (T elem : graph.linkedNodes(source)) {
