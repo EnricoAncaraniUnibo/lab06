@@ -1,8 +1,12 @@
 package it.unibo.generics.graph;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import it.unibo.generics.graph.api.Graph;
 
@@ -19,6 +23,14 @@ public final class UseGraph {
      *            ignored
      */
     public static void main(final String... args) {
+        Graph<String> g = new GraphImpl<>(new BiFunction<String, String, List<String>>() {
+
+            @Override
+            public List<String> apply(String t, String u) {
+                
+            }
+
+        });
         /*
          * Test your graph implementation(s) by calling testGraph
          */
