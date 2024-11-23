@@ -1,14 +1,13 @@
 package it.unibo.generics.graph;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 import it.unibo.generics.graph.api.Graph;
+import it.unibo.generics.graph.api.Strategy;
 
 /**
  *
@@ -23,12 +22,33 @@ public final class UseGraph {
      *            ignored
      */
     public static void main(final String... args) {
-        Graph<String> g = new GraphImpl<>(new BiFunction<String, String, List<String>>() {
+        Graph<String> g = new GraphImpl<>(new Strategy<String>() {
+
+            List<String> ls = new ArrayList<>();
+
+            @Override
+            public List<String> apply(String source, String target, List<String> tmpResult, List<String> visited, Graph<String> graph) {
+                visited.add(source);
+                tmpResult.add(source);
+                for (String elem : graph.linkedNodes(source)) {
+                    if(elem == target) {
+                        tmpResult.add(elem);
+                        return tmpResult;
+                    }
+                    if(!visited.contains(elem)) {
+                        ls=apply(elem, target, tmpResult, visited, graph);
+                        if(ls != null) {
+                            return ls;
+                        }
+                    }
+                }
+                return null;
+            }
         });
         /*
          * Test your graph implementation(s) by calling testGraph
          */
-        testGraph(null);
+        testGraph(g);
     }
 
     private static void testGraph(final Graph<String> graph) {
