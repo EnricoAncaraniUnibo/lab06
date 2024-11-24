@@ -19,7 +19,7 @@ public final class UseGraph {
      *            ignored
      */
     public static void main(final String... args) {
-        Graph<String> g = new GraphImpl<>(new StrategyDfs<>());
+        Graph<String> g = new GraphImpl<>(new StrategyBfs<>());
         /*
          * Test your graph implementation(s) by calling testGraph
          */
